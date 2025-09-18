@@ -1,23 +1,23 @@
 :root {
-	/* Discord Greys - Dark to Lighter */
-	--discord-grey-0: #121212;
-	--discord-grey-1: #1e1f22;
-	--discord-grey-2: #232428;
-	--discord-grey-3: #2c2c2d;
-	--discord-grey-4: #2e3035;
-	--discord-grey-5: #313338;
-	--discord-grey-6: #383a40;
-	--discord-grey-7: #404249; /* primary */
-	--discord-grey-8: #5e6064;
+	/* Uppsala kommun Greys - Dark to Lighter */
+	--discord-grey-0: #1a2a3f;
+	--discord-grey-1: #202E45;
+	--discord-grey-2: #2a3a52;
+	--discord-grey-3: #3a4a5f;
+	--discord-grey-4: #4a5a6f;
+	--discord-grey-5: #5a6a7f;
+	--discord-grey-6: #6a7a8f;
+	--discord-grey-7: #2a3a52; /* primary */
+	--discord-grey-8: #859E96;
 
-	--discord-text: hsl( 210 calc(1 * 9.1%) 92% /1);
+	--discord-text: #ffffff;
 
-	--darktheme-red: rgb(161, 45, 45);
-	--darktheme-blue: rgb(33, 69, 114);
-	--darktheme-green: rgb(36, 88, 49);
-	--darktheme-lightgreen: #008770;
-	--darktheme-brown: rgb(76 58 41);
-	--darktheme-yellow: rgb(84, 70, 9);
+	--darktheme-red: #FFDD00;
+	--darktheme-blue: #859E96;
+	--darktheme-green: #667A75;
+	--darktheme-lightgreen: #859E96;
+	--darktheme-brown: #667A75;
+	--darktheme-yellow: #FFDD00;
 	
 	/* Lightmode white - Darker to lighter */
 	--lighttheme-1: #fff;
@@ -31,52 +31,52 @@
 	--lighttheme-text: black;
 
 	/* Director v2 - General colors */
-	/* -- Links */
-	--a-dark-link: #69aadc;
-	--a-dark-visited: #69aadc;
-	--a-dark-hover: #6da5dd;
-	--a-dark-focus: #6da5dd;
-	--a-dark-active: #3a80c6;
+	/* -- Links - Uppsala kommun yellow */
+	--a-dark-link: #FFDD00;
+	--a-dark-visited: #FFDD00;
+	--a-dark-hover: #e6c700;
+	--a-dark-focus: #FFDD00;
+	--a-dark-active: #ccb000;
 
-	--a-darker-link: #b9dff9;
-	--a-darker-visited: #b9dff9;
-	--a-darker-hover: #048ae8;
-	--a-darker-focus: #d9e4eb;
-	--a-darker-active: #d9e4eb;
+	--a-darker-link: #e6c700;
+	--a-darker-visited: #e6c700;
+	--a-darker-hover: #ccb000;
+	--a-darker-focus: #e6c700;
+	--a-darker-active: #b39900;
 
-	--a-lighter-link: #9ed0e1;
-	--a-lighter-visited: #9ed0e1;
-	--a-lighter-hover: #8acee4;
-	--a-lighter-focus: #8acee4;
-	--a-lighter-active: #89d5ee;
+	--a-lighter-link: #FFDD00;
+	--a-lighter-visited: #FFDD00;
+	--a-lighter-hover: #e6c700;
+	--a-lighter-focus: #FFDD00;
+	--a-lighter-active: #ccb000;
 
-	--a-link: #144267;
-	--a-visited: #144267;
-	--a-hover: #38668c;
-	--a-focus: #38668c;
-	--a-active: #0165b5;
+	--a-link: #FFDD00;
+	--a-visited: #FFDD00;
+	--a-hover: #e6c700;
+	--a-focus: #FFDD00;
+	--a-active: #ccb000;
 
 	/* -- Box colors */
-	--director-box: rgb(165 119 18);
-	--codirector-box: rgb(67 122 213);
+	--director-box: #FFDD00;
+	--codirector-box: #859E96;
 
-	--director-dark-box: rgb(165 119 18);
-	--codirector-dark-box: rgb(129 127 127);
+	--director-dark-box: #FFDD00;
+	--codirector-dark-box: #667A75;
 	
 	--widget-width: 25%;
 	--rtl-or-ltr: left;
 	
-	/* Original colors */
-	--background-color: #141926;
-	--dark-background-color: #02050c;
-	--container-color: #373737;
-	--button-color: #2A2A2A;
-	--blue-accent: #4a4c63;
-	--red-accent: #553737;
-	--light-grey: #ddd;
-	--near-black: #02050c;
-	--green-accent: #3f4f50;
-	--olive-accent: #535D32;
+	/* Uppsala kommun colors */
+	--background-color: #202E45;
+	--dark-background-color: #202E45;
+	--container-color: #2a3a52;
+	--button-color: #3a4a5f;
+	--blue-accent: #859E96;
+	--red-accent: #FFDD00;
+	--light-grey: #859E96;
+	--near-black: #1a2a3f;
+	--green-accent: #667A75;
+	--olive-accent: #FFDD00;
 	--regular-margin: 10px;
 	--director-margin: 15px 20px 0 0;
 	--fit-style: contain;
@@ -1702,6 +1702,7 @@ body {
 }
 body.darktheme{
 	background-color: var(--dark-background-color);
+	color: #ffffff;
 }
 
 ::-webkit-scrollbar {
@@ -6613,49 +6614,49 @@ button.toggleSettings,
     --lighttheme-text: #111;
 
     /* keep original semantics; just slightly modernize */
-    --container-color: #3a3d45; /* dark surface used in many cards */
+    --container-color: #2a3a52; /* Uppsala kommun dark surface used in many cards */
 
-    /* global accent (aligned with about.html) */
-    --accent-color: #56a5ea;
-    --accent-hover-color: #7AACD2;
+    /* global accent (Uppsala kommun yellow) */
+    --accent-color: #FFDD00;
+    --accent-hover-color: #e6c700;
 
-    /* unified link colors (light theme) — aligned with about.html accent */
-    --a-link: #3e8fd8;      /* base: #4299e1 softened */
-    --a-visited: #3e8fd8;
-    --a-hover: #56a5ea;     /* lighter hover */
-    --a-focus: #56a5ea;
-    --a-active: #2f7ec4;
+    /* unified link colors (light theme) — Uppsala kommun yellow */
+    --a-link: #FFDD00;      /* Uppsala kommun yellow */
+    --a-visited: #FFDD00;
+    --a-hover: #e6c700;     /* darker hover */
+    --a-focus: #FFDD00;
+    --a-active: #ccb000;
 
     /* lighter links used in specific sections */
-    --a-lighter-link: #2d6aa6;
-    --a-lighter-visited: #2d6aa6;
-    --a-lighter-hover: #3e7fbd;
-    --a-lighter-focus: #3e7fbd;
-    --a-lighter-active: #246295;
+    --a-lighter-link: #FFDD00;
+    --a-lighter-visited: #FFDD00;
+    --a-lighter-hover: #e6c700;
+    --a-lighter-focus: #FFDD00;
+    --a-lighter-active: #ccb000;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         /* soften Discord greys slightly */
-        --discord-grey-5: #2f3237;
-        --discord-grey-7: #3a3d45;
-        --discord-text: hsl(210 10% 92% / 1);
+        --discord-grey-5: #5a6a7f;
+        --discord-grey-7: #2a3a52;
+        --discord-text: #ffffff;
         /* muted icon color to match subdued typography */
-        --muted-icon: #c8ccd4;
+        --muted-icon: #859E96;
         /* unified link colors (dark theme) */
-        --a-dark-link: #9ec7ee;   /* tinted to about.html accent */
-        --a-dark-visited: #9ec7ee;
-        --a-dark-hover: #b9d8f6;
-        --a-dark-focus: #b9d8f6;
-        --a-dark-active: #8abbe8;
-        --a-darker-link: #bcd8f4;
-        --a-darker-visited: #bcd8f4;
-        --a-darker-hover: #cfe6fb;
-        --a-darker-focus: #cfe6fb;
-        --a-darker-active: #a9cdef;
-        /* accent for dark UI */
-        --accent-color: #498dc2;
-        --accent-hover-color: #6FA5CF;
+        --a-dark-link: #FFDD00;   /* Uppsala kommun yellow */
+        --a-dark-visited: #FFDD00;
+        --a-dark-hover: #e6c700;
+        --a-dark-focus: #FFDD00;
+        --a-dark-active: #ccb000;
+        --a-darker-link: #e6c700;
+        --a-darker-visited: #e6c700;
+        --a-darker-hover: #ccb000;
+        --a-darker-focus: #e6c700;
+        --a-darker-active: #b39900;
+        /* accent for dark UI (Uppsala kommun yellow) */
+        --accent-color: #FFDD00;
+        --accent-hover-color: #e6c700;
     }
 }
 
