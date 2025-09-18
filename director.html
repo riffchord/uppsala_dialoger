@@ -1501,10 +1501,16 @@
 						<i class="las la-paper-plane"></i>
 						<span data-translate="forward-to-room">Transfer</span>
 					</button>
+					
 					<button data-action-type="hangup" class="mainonly"  title="Force the user to Disconnect. They can always reconnect." onclick="directHangup(this, event);">
 						<i class="las la-sign-out-alt"></i>
 						<span data-translate="disconnect-guest">Hangup</span>
 					</button>
+					<button data-action-type="green-room" class="mainonly" title="Transfer user to green room" onclick="directMigrate(this, false, 'green_room');">
+						<i class="las la-home"></i>
+						<span >GREEN ROOM</span>
+					</button>
+					
                 </div>
                 <div class="flexBreak"></div>
 				<div class="row three"> 
@@ -2400,6 +2406,8 @@
 			</label>
 			Transfer to room
 			<input type="text" style="display:none" data-param="roomid" class="largeTextEntry" placeholder="Enter the room name here" onkeypress="EnterButtonChat(event)" />
+			<br />
+			<button style="width:200px; background-color: #4CAF50; color: white; border: none; padding: 10px; margin: 10px 0; border-radius: 5px; font-size: 16px; font-weight: bold;" onclick="transferToGreenRoom(this.parentNode)" >GREEN ROOM</button>
 			<br />
 			<label class="switch" title="Enable custom password">
 			  <input type="checkbox" data-param="changepassword" onchange="toggle(this.parentNode.nextElementSibling, false, false);">

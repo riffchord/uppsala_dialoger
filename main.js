@@ -8665,3 +8665,62 @@ async function main() {
 		script.src = "./thirdparty/polyfill.min.js"; // dynamically load this only if its needed. Keeps loading time down.
 	}, 100);
 }
+
+// Function to handle guest settings changes including room transfers
+function changeGuestSettings(ele) {
+	var eles = ele.querySelectorAll('[data-param]');
+	var UUID = ele.dataset.UUID;
+	var settings = {};
+	
+	for (var i = 0; i < eles.length; i++) {
+		if (eles[i].tagName.toLowerCase() == "input") {
+			if (eles[i].checked === true) {
+				settings[eles[i].dataset.param] = true;
+			} else if (eles[i].checked === false) {
+				settings[eles[i].dataset.param] = false;
+			} else {
+				settings[eles[i].dataset.param] = eles[i].value;
+			}
+		}
+	}
+	
+	// Handle password changes
+	if (!settings.changepassword) {
+		delete settings.password;
+	}
+	delete settings.changepassword;
+	
+	// Handle room changes
+	if (settings.changeroom && settings.roomid) {
+		// Transfer to the specified room
+		directMigrate(getById('promptModalMessage').querySelector('[data-action-type="forward"]'), false, settings.roomid);
+		delete settings.roomid;
+	} else if (!settings.changeroom) {
+		delete settings.roomid;
+	}
+	delete settings.changeroom;
+	
+	// Send other settings changes
+	if (Object.keys(settings).length > 0) {
+		var msg = {};
+		msg.changeParams = settings;
+		if (typeof session !== 'undefined' && session.sendRequest) {
+			session.sendRequest(msg, UUID);
+		}
+	}
+	
+	closeModal();
+}
+
+// Function to transfer user to green room
+function transferToGreenRoom(ele) {
+	var UUID = ele.dataset.UUID;
+	if (UUID) {
+		// Use the existing directMigrate function to transfer to green_room
+		var forwardButton = getById('promptModalMessage').querySelector('[data-action-type="forward"]');
+		if (forwardButton) {
+			directMigrate(forwardButton, false, 'green_room');
+		}
+	}
+	closeModal();
+}
