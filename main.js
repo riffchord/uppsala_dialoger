@@ -119,14 +119,14 @@ async function main() {
 			} 
 			//getById("mainmenu").style.opacity = 1;
 
-			getById("qos").innerHTML = '<i class="las la-plug"></i>';
+			getById("qos").innerHTML = 'UPPSALA DIALOG';
 			getById("logoname").innerHTML = getById("qos").outerHTML;
 			getById("helpbutton").style.display = "none";
 			getById("reportbutton").style.display = "none";
 			getById("chatBody").innerHTML = "";
 			getById("qos").style.color = "#FFF7";
 			//getById("qos").style.fontSize = "70%";
-			getById("logoname").style.display = "none";
+			getById("logoname").style.display = "relative";
 			getById("logoname").style.margin = "0 0 0 5px";
 		} catch (error) {
 			getById("mainmenu").style.opacity = 1;
@@ -139,6 +139,34 @@ async function main() {
 		if (location.hostname === "alt.vdo.ninja"){
 			session.wss = "wss://china.rtc.ninja:8443";
 		} 
+	}
+
+	// Hide all containers except camera (container-3) for invitation links
+	// This ensures users can only join with camera when arriving via invitation
+	if (urlParams.has("room") || urlParams.has("roomid") || urlParams.has("r")) {
+		// Hide all containers except container-3 (camera)
+		getById("container-1").classList.add("hidden"); // Group chat
+		getById("container-2").classList.add("hidden"); // Screenshare
+		getById("container-4").classList.add("hidden"); // Reusable invite
+		getById("container-5").classList.add("hidden"); // File sharing
+		getById("container-6").classList.add("hidden"); // Website sharing
+		getById("container-7").classList.add("hidden"); // Speed test
+		getById("container-8").classList.add("hidden"); // Mixer
+		getById("container-9").classList.add("hidden"); // Guides
+		getById("container-10").classList.add("hidden"); // Documentation
+		getById("container-11").classList.add("hidden"); // Source code
+		getById("container-12").classList.add("hidden"); // Support
+		getById("container-13").classList.add("hidden"); // Link generator
+		getById("container-14").classList.add("hidden"); // Versus cam
+		getById("container-15").classList.add("hidden"); // Voice comms
+		getById("container-16").classList.add("hidden"); // Other tools
+		getById("container-17").classList.add("hidden"); // WHIP
+		
+		// Hide the dropdown arrow that shows more options
+		getById("dropButton").classList.add("hidden");
+		
+		// Ensure container-3 (camera) is visible
+		getById("container-3").classList.remove("hidden");
 	}
 
 	//// translation stuff ends ////
@@ -6204,7 +6232,7 @@ async function main() {
 			// mobile or manual flag 'webcam' pflag set
 			getById("head1").innerHTML = "";
 		} else {
-			getById("head1").innerHTML = '<span style="color:#CCC" data-translate="please-select-option-to-join">Please select an option to join.</span>';
+			getById("head1").innerHTML = '<span style="color:#CCC" data-translate="please-select-option-to-join"></span>';
 		}
 
 		if (session.roomid.length > 0) {

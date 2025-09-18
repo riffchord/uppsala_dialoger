@@ -91,11 +91,12 @@
 		<div id="header">
 			
 			<a id="logoname" href="./" style="text-decoration: none; color: white; margin: 0 2px 0px 8px;">
+				
 				<span data-translate="logo-header">
 					<span id="qos">UPPSALA</span>DIALOG
 				</span>
 			</a>
-			<div id="head1">
+			<div id="head1" class="hidden">
 				<input type="text" autocorrect="off" autocapitalize="none" id="joinroomID" name="joinroomID" tabindex="1" size="22" placeholder="Join by Room Name here" alt="Enter a room name to join" title="Enter a room name to quick join" onkeyup="jumptoroom(event)"/>
 				<button onclick="jumptoroom();" id='jumptoroomButton' role="button" aria-pressed="false" tabindex="1" alt="Join room" title="Join room" >GO</button>
 			</div>
@@ -302,7 +303,17 @@
 			</span>
 		</span>
 		<div id="mainmenu" class="row" style="opacity: 0;">
-			<div id="container-1" title="Add Group Chat to OBS"  alt="Add Group Chat to OBS" tabindex="1" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);" class="column columnfade pointer card" style=" overflow-y: auto;">
+			<!-- Uppsala kommun logo and description -->
+			<div style="text-align: center; margin: 40px auto; max-width: 600px; padding: 20px;">
+				<img src="./media/uppsala_kommun.png" alt="Uppsala kommun" style="max-width: 300px; max-height: 150px; width: auto; height: auto; margin-bottom: 30px;" />
+				<h1 style="color: #FFDD00; font-size: 2.5em; margin-bottom: 20px;">Uppsala Dialog</h1>
+				<p style="color: #ffffff; font-size: 1.2em; line-height: 1.6; margin-bottom: 30px;">
+					Välkommen till Uppsala kommuns digitala mötesplattform. Här kan du enkelt ansluta till digitala möten och samtal med hög kvalitet och låg latens.
+				</p>
+			</div>
+			
+			<!-- Hide all containers on main page -->
+			<div id="container-1" title="Add Group Chat to OBS"  alt="Add Group Chat to OBS" tabindex="1" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);" class="column columnfade pointer card hidden" style=" overflow-y: auto;">
 				
 					<h2>
 						<span data-translate="add-group-chat">Create a Room</span>
@@ -455,7 +466,7 @@
 						</div>
 					</div>
 			</div>
-			<div id="container-3"  title="Add your Camera to OBS" onkeyup="enterPressedClick(event,this);"  alt="Add your Camera to OBS" tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card" onclick="previewWebcam()" style=" overflow-y: auto;">
+			<div id="container-3"  title="Add your Camera to OBS" onkeyup="enterPressedClick(event,this);"  alt="Add your Camera to OBS" tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card hidden" onclick="previewWebcam()" style=" overflow-y: auto;">
 				<h2 id="add_camera">
 					<span data-translate="add-your-camera">Add your Camera to OBS</span>
 				</h2>
@@ -686,7 +697,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="container-2" title="Remote Screenshare into OBS" onkeyup="enterPressedClick(event,this);"  alt="Remote Screenshare into OBS"  tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card screenshareIcon" style=" overflow-y: auto;">
+			<div id="container-2" title="Remote Screenshare into OBS" onkeyup="enterPressedClick(event,this);"  alt="Remote Screenshare into OBS"  tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card screenshareIcon hidden" style=" overflow-y: auto;">
 				<h2 id="add_screen">
 					<span data-translate="remote-screenshare-obs">Remote Screenshare into OBS</span>
 				</h2>
@@ -785,7 +796,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="container-4" tabindex="1" alt="Create Reusable Invite" onkeyup="enterPressedClick(event,this);" onclick="loadQR();" title="Create Reusable Invite" role="button" aria-pressed="false" class="column columnfade pointer card" style=" overflow-y: auto;">
+			<div id="container-4" tabindex="1" alt="Create Reusable Invite" onkeyup="enterPressedClick(event,this);" onclick="loadQR();" title="Create Reusable Invite" role="button" aria-pressed="false" class="column columnfade pointer card hidden" style=" overflow-y: auto;">
 				<h2>
 					<span data-translate="create-reusable-invite">Create Reusable Invite</span>
 				</h2>
@@ -912,7 +923,7 @@
 				</div>
 			</div>
 			
-			<div id="dropButton" onclick="dropDownButtonAction()" title="More Options" aria-hidden="true"><i class="las la-chevron-down" ></i></div>
+			<div id="dropButton" onclick="dropDownButtonAction()" title="More Options" aria-hidden="true" class="hidden"><i class="las la-chevron-down" ></i></div>
 			
 			<div id="container-5" class="column columnfade pointer card hidden" style=" overflow-y: auto;">
 				<h2><span data-translate="share-local-video-file">Stream Media File</span></h2>
@@ -1105,7 +1116,7 @@
 				<b>?push=xxx</b> links are for sending video, while <b>?view=xxx</b> links are for viewing.
 			</div>
 			
-			<div id="info" class="fullcolumn columnfade">
+			<div id="info" class="fullcolumn columnfade hidden">
 				<center>
 					<div class="infoblob">
 						<span data-translate="info-blob">
