@@ -3200,6 +3200,11 @@ function manageSceneState(data, UUID) {
 			processNeeded = true;
 			session.pcs[UUID].sceneMute = data.sceneMute;
 		}
+		if ("liveBroadcastIndicator" in data) {
+			processNeeded = true;
+			console.log("Processing liveBroadcastIndicator:", data.liveBroadcastIndicator);
+			handleLiveBroadcastIndicator({ liveBroadcastIndicator: data.liveBroadcastIndicator, scene: "1" });
+		}
 
 		if (data.obsState) {
 			if ("sourceActive" in data.obsState) {
@@ -17043,6 +17048,8 @@ async function directAudioChannel(ele, event, director=false) {
 
 function directEnable(ele, event, director = false) {
 	// A directing room only is controlled by the Director, with the exception of MUTE.
+	console.log("directEnable called with scene:", ele.dataset.scene, "director:", director);
+	console.log("Session director:", session.director, "Session showDirector:", session.showDirector);
 	var scene = ele.dataset.scene;
 	if (!(event.ctrlKey || event.metaKey)) {
 		if (ele.value == 1) {
@@ -17133,6 +17140,7 @@ function directEnable(ele, event, director = false) {
 	
 	// Add live broadcast indicator for scene 1
 	if (scene === "1") {
+		console.log("Scene 1 detected, setting liveBroadcast to:", ele.value == 1);
 		msg.liveBroadcast = ele.value == 1;
 	}
 
@@ -17145,26 +17153,28 @@ function directEnable(ele, event, director = false) {
 	} catch (e) {}
 	
 	// Send live broadcast indicator to user for scene 1
+	console.log("Checking if we should send live broadcast indicator. Scene:", scene, "liveBroadcast:", msg.liveBroadcast);
 	if (scene === "1" && msg.liveBroadcast !== undefined) {
 		try {
-			// Send the live broadcast status to the specific user who was added/removed from scene 1
+			// Send the live broadcast status directly (same format as blind button)
 			var targetUUID = ele.dataset.UUID;
-			log("Attempting to send live broadcast indicator to UUID: " + targetUUID + ", liveBroadcast: " + msg.liveBroadcast);
+			var liveMsg = {
+				liveBroadcastIndicator: msg.liveBroadcast,
+				UUID: targetUUID
+			};
+			console.log("Sending live broadcast message to user:", targetUUID, liveMsg);
 			
-			if (targetUUID && session.rpcs[targetUUID]) {
-				var liveMsg = {
-					liveBroadcastIndicator: msg.liveBroadcast,
-					scene: scene
-				};
-				log("Sending live broadcast message:", liveMsg);
-				var result = session.sendRequest(liveMsg, targetUUID);
-				log("Send result:", result);
+			if (targetUUID) {
+				session.sendRequest(liveMsg, targetUUID);
+				console.log("Live broadcast message sent successfully");
 			} else {
-				log("Target UUID not found or not in session.rpcs. UUID: " + targetUUID + ", Available UUIDs: " + Object.keys(session.rpcs));
+				console.log("No target UUID found");
 			}
 		} catch (e) {
-			errorlog("Error sending live broadcast indicator:", e);
+			console.error("Error sending live broadcast indicator:", e);
 		}
+	} else {
+		console.log("Not sending live broadcast indicator. Scene:", scene, "liveBroadcast:", msg.liveBroadcast);
 	}
 
 	//for (var uuid in session.pcs){ // removing this since it's obsolete at this point.
@@ -50282,6 +50292,11 @@ async function targetGuest(target, action, value = null, value2 = null) {
 		} catch (e) {
 			errorlog(e);
 		}
+	} else if (action == "liveBroadcastIndicator") {
+		// Handle live broadcast indicator for user's own view
+		console.log("Received liveBroadcastIndicator action in targetGuest:", value, target);
+		handleLiveBroadcastIndicator({ liveBroadcastIndicator: value, scene: target });
+		return true;
 	}
 	return false;
 }
@@ -50347,7 +50362,9 @@ function oscClient() {
 
 		socket.addEventListener("message", async function (event) {
 			if (event.data) {
+				console.log("WebRTC message received:", event.data);
 				var data = JSON.parse(event.data);
+				console.log("Parsed WebRTC data:", data);
 
 				if ("msg" in data) {
 					data = data.msg;
@@ -51080,6 +51097,7 @@ function checkType(value) {
 async function processMessage(data) {
 	// api.vdo.ninja/apikey/action/value
 	try {
+		console.log("processMessage called with data:", data);
 		warnlog(data);
 		if ("target" in data && data.target !== "null" && data.target !== null) {
 			if ("action" in data) {
@@ -51138,16 +51156,9 @@ function handleLiveBroadcastIndicator(data) {
 			if (container) {
 				if (data.liveBroadcastIndicator) {
 					container.classList.add("userLiveInScene1");
-					// Also add to video element if it exists
-					if (videoElement) {
-						videoElement.classList.add("userLiveInScene1");
-					}
 					log("User is now live in scene 1 - showing red border");
 				} else {
 					container.classList.remove("userLiveInScene1");
-					if (videoElement) {
-						videoElement.classList.remove("userLiveInScene1");
-					}
 					log("User is no longer live in scene 1 - removing red border");
 				}
 			} else {
