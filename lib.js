@@ -17147,18 +17147,23 @@ function directEnable(ele, event, director = false) {
 	// Send live broadcast indicator to user for scene 1
 	if (scene === "1" && msg.liveBroadcast !== undefined) {
 		try {
-			// Find the target user's connection and send them the live broadcast status
-			for (var uuid in session.pcs) {
-				if (session.pcs[uuid].scene === scene) {
-					var liveMsg = {
-						liveBroadcastIndicator: msg.liveBroadcast,
-						scene: scene
-					};
-					session.sendMessage(liveMsg, uuid);
-				}
+			// Send the live broadcast status to the specific user who was added/removed from scene 1
+			var targetUUID = ele.dataset.UUID;
+			log("Attempting to send live broadcast indicator to UUID: " + targetUUID + ", liveBroadcast: " + msg.liveBroadcast);
+			
+			if (targetUUID && session.rpcs[targetUUID]) {
+				var liveMsg = {
+					liveBroadcastIndicator: msg.liveBroadcast,
+					scene: scene
+				};
+				log("Sending live broadcast message:", liveMsg);
+				var result = session.sendRequest(liveMsg, targetUUID);
+				log("Send result:", result);
+			} else {
+				log("Target UUID not found or not in session.rpcs. UUID: " + targetUUID + ", Available UUIDs: " + Object.keys(session.rpcs));
 			}
 		} catch (e) {
-			errorlog(e);
+			errorlog("Error sending live broadcast indicator:", e);
 		}
 	}
 
@@ -51099,6 +51104,7 @@ async function processMessage(data) {
 			}
 		} else if ("liveBroadcastIndicator" in data) {
 			// Handle live broadcast indicator for user's own view
+			log("Received liveBroadcastIndicator message:", data);
 			handleLiveBroadcastIndicator(data);
 			return true;
 		}
@@ -51111,9 +51117,23 @@ async function processMessage(data) {
 // Handle live broadcast indicator for user's own view
 function handleLiveBroadcastIndicator(data) {
 	try {
+		log("handleLiveBroadcastIndicator called with data:", data);
 		if (data.liveBroadcastIndicator !== undefined && data.scene === "1") {
-			var container = document.getElementById("container");
-			var videoElement = document.getElementById("localVideo") || document.getElementById("videoElement");
+			// Try multiple possible container selectors
+			var container = document.getElementById("container") || 
+							document.getElementById("mainContainer") || 
+							document.querySelector(".main-container") ||
+							document.querySelector("#container_director") ||
+							document.body;
+			
+			// Try multiple possible video element selectors
+			var videoElement = document.getElementById("localVideo") || 
+							  document.getElementById("videoElement") || 
+							  document.getElementById("myVideo") ||
+							  document.querySelector("video");
+			
+			log("Found container:", container);
+			log("Found video element:", videoElement);
 			
 			if (container) {
 				if (data.liveBroadcastIndicator) {
@@ -51130,10 +51150,12 @@ function handleLiveBroadcastIndicator(data) {
 					}
 					log("User is no longer live in scene 1 - removing red border");
 				}
+			} else {
+				log("No container found for live broadcast indicator");
 			}
 		}
 	} catch (e) {
-		errorlog(e);
+		errorlog("Error in handleLiveBroadcastIndicator:", e);
 	}
 }
 
