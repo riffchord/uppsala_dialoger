@@ -4120,6 +4120,33 @@ div#roomnotes2 {
 .controlsGrid button[data-action-type="solo-chat"] i {
 	color: #03a303;
 }
+
+/* Special styling for "add to scene 1" button - more prominent red background */
+.controlsGrid button[data-action-type="addToScene"][data-scene="1"] {
+	background-color: #dc3545 !important;
+	border-color: #dc3545 !important;
+	color: white !important;
+	font-weight: bold !important;
+	box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3) !important;
+}
+.controlsGrid button[data-action-type="addToScene"][data-scene="1"]:hover {
+	background-color: #c82333 !important;
+	border-color: #bd2130 !important;
+	box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4) !important;
+}
+.controlsGrid button[data-action-type="addToScene"][data-scene="1"].pressed {
+	background-color: #28a745 !important;
+	border-color: #28a745 !important;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+body.darktheme .controlsGrid button[data-action-type="addToScene"][data-scene="1"] {
+	background-color: #e74c3c !important;
+	border-color: #e74c3c !important;
+}
+body.darktheme .controlsGrid button[data-action-type="addToScene"][data-scene="1"]:hover {
+	background-color: #c0392b !important;
+	border-color: #c0392b !important;
+}
 /* Button icons: Blue  */
 .controlsGrid button[data-action-type=""] i {
 	color: #00f;
@@ -5650,6 +5677,39 @@ body.darktheme .cameraTip{
 }
 body.darktheme .containerGreen{
 	background-color: #243824!important;
+}
+
+/* Red border for users in scene 1 (live broadcast indicator) */
+.containerLive{
+	border: 3px solid #ff0000 !important;
+	box-shadow: 0 0 10px rgba(255, 0, 0, 0.5) !important;
+}
+body.darktheme .containerLive{
+	border: 3px solid #ff4444 !important;
+	box-shadow: 0 0 10px rgba(255, 68, 68, 0.5) !important;
+}
+
+/* Red border for user's own video when they are live in scene 1 */
+.userLiveInScene1 {
+	border: 4px solid #ff0000 !important;
+	box-shadow: 0 0 15px rgba(255, 0, 0, 0.7) !important;
+	animation: livePulse 2s infinite;
+}
+body.darktheme .userLiveInScene1 {
+	border: 4px solid #ff4444 !important;
+	box-shadow: 0 0 15px rgba(255, 68, 68, 0.7) !important;
+}
+
+/* Pulse animation for live indicator */
+@keyframes livePulse {
+	0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+	50% { box-shadow: 0 0 25px rgba(255, 0, 0, 1); }
+	100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+}
+body.darktheme @keyframes livePulse {
+	0% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.7); }
+	50% { box-shadow: 0 0 25px rgba(255, 68, 68, 1); }
+	100% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.7); }
 }
 body.darktheme .startupWarning>.las  {
 	color:white!important;

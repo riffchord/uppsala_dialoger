@@ -17054,24 +17054,36 @@ function directEnable(ele, event, director = false) {
 			}
 			if (director) {
 				var cc = 0;
+				var scene1Active = false;
 				getById("container_director")
 					.querySelectorAll('[data-action-type="addToScene"]')
 					.forEach(ge => {
 						if (ge.value == 1) {
 							cc += 1;
+							if (ge.dataset.scene === "1") {
+								scene1Active = true;
+							}
 						}
 					});
 				if (!cc) {
 					getById("container_director").style.backgroundColor = null;
 					getById("container_director").classList.remove("containerGreen");
 				}
+				// Remove red border if not in scene 1
+				if (!scene1Active) {
+					getById("container_director").classList.remove("containerLive");
+				}
 			} else {
 				var cc = 0;
+				var scene1Active = false;
 				getById("container_" + ele.dataset.UUID)
 					.querySelectorAll('[data-action-type="addToScene"]')
 					.forEach(ge => {
 						if (ge.value == 1) {
 							cc += 1;
+							if (ge.dataset.scene === "1") {
+								scene1Active = true;
+							}
 							log("ge.value: '" + ge.value + "'");
 						} else {
 							log("ge.value:--'" + ge.value + "'");
@@ -17081,6 +17093,10 @@ function directEnable(ele, event, director = false) {
 				if (!cc) {
 					getById("container_" + ele.dataset.UUID).style.backgroundColor = null;
 					getById("container_" + ele.dataset.UUID).classList.remove("containerGreen");
+				}
+				// Remove red border if not in scene 1
+				if (!scene1Active) {
+					getById("container_" + ele.dataset.UUID).classList.remove("containerLive");
 				}
 			}
 		} else {
@@ -17092,8 +17108,16 @@ function directEnable(ele, event, director = false) {
 			}
 			if (director) {
 				getById("container_director").classList.add("containerGreen");
+				// Add red border for scene 1 (live broadcast indicator)
+				if (scene === "1") {
+					getById("container_director").classList.add("containerLive");
+				}
 			} else {
 				getById("container_" + ele.dataset.UUID).classList.add("containerGreen");
+				// Add red border for scene 1 (live broadcast indicator)
+				if (scene === "1") {
+					getById("container_" + ele.dataset.UUID).classList.add("containerLive");
+				}
 			}
 		}
 	}
@@ -17106,6 +17130,11 @@ function directEnable(ele, event, director = false) {
 	msg.action = "display";
 	msg.value = ele.value;
 	msg.target = ele.dataset.sid;
+	
+	// Add live broadcast indicator for scene 1
+	if (scene === "1") {
+		msg.liveBroadcast = ele.value == 1;
+	}
 
 	try {
 		if (msg.value == 1) {
@@ -17114,6 +17143,24 @@ function directEnable(ele, event, director = false) {
 			pokeIframeAPI("remove-from-scene", scene, ele.dataset.UUID);
 		}
 	} catch (e) {}
+	
+	// Send live broadcast indicator to user for scene 1
+	if (scene === "1" && msg.liveBroadcast !== undefined) {
+		try {
+			// Find the target user's connection and send them the live broadcast status
+			for (var uuid in session.pcs) {
+				if (session.pcs[uuid].scene === scene) {
+					var liveMsg = {
+						liveBroadcastIndicator: msg.liveBroadcast,
+						scene: scene
+					};
+					session.sendMessage(liveMsg, uuid);
+				}
+			}
+		} catch (e) {
+			errorlog(e);
+		}
+	}
 
 	//for (var uuid in session.pcs){ // removing this since it's obsolete at this point.
 	//	if (session.pcs[uuid].stats.info && ("version" in session.pcs[uuid].stats.info) &&  (session.pcs[uuid].stats.info.version < 17.2)){
@@ -17577,6 +17624,8 @@ function syncSceneState(sid) {
 		return;
 	}
 	var scenes = session.syncState[sid].scenes || [];
+	var scene1Active = false;
+	
 	for (var scene in scenes) {
 		try {
 			var ele = document.querySelector('[data-sid="' + sid + '"][data-action-type="addToScene"][data-scene="' + scene + '"]');
@@ -17586,6 +17635,10 @@ function syncSceneState(sid) {
 					ele.classList.add("pressed");
 					ele.ariaPressed = "true";
 					getById("container_" + ele.dataset.UUID).classList.add("containerGreen");
+					// Track if scene 1 is active for red border
+					if (scene === "1") {
+						scene1Active = true;
+					}
 					if (ele.children[1]) {
 						ele.children[1].innerHTML = "Remove";
 					}
@@ -17600,6 +17653,21 @@ function syncSceneState(sid) {
 			}
 		} catch (e) {}
 	}
+	
+	// Handle red border for scene 1 (live broadcast indicator)
+	try {
+		var container = document.querySelector('[data-sid="' + sid + '"]');
+		if (container && container.dataset.UUID) {
+			var containerElement = getById("container_" + container.dataset.UUID);
+			if (containerElement) {
+				if (scene1Active) {
+					containerElement.classList.add("containerLive");
+				} else {
+					containerElement.classList.remove("containerLive");
+				}
+			}
+		}
+	} catch (e) {}
 }
 
 function issueLayout(scene = false, UUID = false) {
@@ -51029,11 +51097,44 @@ async function processMessage(data) {
 					return Commands[data.action]();
 				}
 			}
+		} else if ("liveBroadcastIndicator" in data) {
+			// Handle live broadcast indicator for user's own view
+			handleLiveBroadcastIndicator(data);
+			return true;
 		}
 	} catch (e) {
 		errorlog(e);
 	}
 	return null;
+}
+
+// Handle live broadcast indicator for user's own view
+function handleLiveBroadcastIndicator(data) {
+	try {
+		if (data.liveBroadcastIndicator !== undefined && data.scene === "1") {
+			var container = document.getElementById("container");
+			var videoElement = document.getElementById("localVideo") || document.getElementById("videoElement");
+			
+			if (container) {
+				if (data.liveBroadcastIndicator) {
+					container.classList.add("userLiveInScene1");
+					// Also add to video element if it exists
+					if (videoElement) {
+						videoElement.classList.add("userLiveInScene1");
+					}
+					log("User is now live in scene 1 - showing red border");
+				} else {
+					container.classList.remove("userLiveInScene1");
+					if (videoElement) {
+						videoElement.classList.remove("userLiveInScene1");
+					}
+					log("User is no longer live in scene 1 - removing red border");
+				}
+			}
+		}
+	} catch (e) {
+		errorlog(e);
+	}
 }
 
 function midiHotkeysNote(note, velocity = false) {
