@@ -157,6 +157,19 @@ async function main() {
 		getById("container-11").classList.add("hidden"); // Source code
 		getById("container-12").classList.add("hidden"); // Support
 		getById("container-13").classList.add("hidden"); // Link generator
+		
+		// Check if user is in live room and add red border
+		var roomName = urlParams.get("room") || urlParams.get("roomid") || urlParams.get("r");
+		if (roomName === "live") {
+			// Add red border to indicate user is live
+			setTimeout(function() {
+				var container = document.getElementById("container") || document.getElementById("mainContainer") || document.body;
+				if (container) {
+					container.classList.add("userInLiveRoom");
+					console.log("User is in live room - red border applied");
+				}
+			}, 1000); // Wait a bit for the page to load
+		}
 		getById("container-14").classList.add("hidden"); // Versus cam
 		getById("container-15").classList.add("hidden"); // Voice comms
 		getById("container-16").classList.add("hidden"); // Other tools
