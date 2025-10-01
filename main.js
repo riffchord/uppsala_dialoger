@@ -159,9 +159,11 @@ async function main() {
 		getById("container-13").classList.add("hidden"); // Link generator
 		
 		// Check if user is in live room and add red border
+		// BUT only if this is not a scene capture (scenes should not have red borders)
 		var roomName = urlParams.get("room") || urlParams.get("roomid") || urlParams.get("r");
-		if (roomName === "live") {
-			// Add red border to indicate user is live
+		var isScene = urlParams.has("scene");
+		if (roomName === "live" && !isScene) {
+			// Add red border to indicate user is live (only for actual users, not scene captures)
 			setTimeout(function() {
 				var container = document.getElementById("container") || document.getElementById("mainContainer") || document.body;
 				if (container) {
